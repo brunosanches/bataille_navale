@@ -6,11 +6,43 @@ import ensta.util.Orientation;
 public class Board implements IBoard {
 
 	private static final int DEFAULT_SIZE = 10;
-	
+	private int size;
+
+	// TODO: Implement methods
 	public Board() {
 	}
 
 	public void print() {
+	}
+
+	@Override
+	public int getSize() {
+		return 0;
+	}
+
+	@Override
+	public boolean putShip(AbstractShip ship, Coords coords) {
+		return false;
+	}
+
+	@Override
+	public boolean hasShip(Coords coords) {
+		return false;
+	}
+
+	@Override
+	public void setHit(boolean hit, Coords coords) {
+
+	}
+
+	@Override
+	public Boolean getHit(Coords coords) {
+		return null;
+	}
+
+	@Override
+	public Hit sendHit(Coords res) {
+		return null;
 	}
 
 	public boolean canPutShip(AbstractShip ship, Coords coords) {
