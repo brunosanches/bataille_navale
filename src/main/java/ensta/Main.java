@@ -1,6 +1,7 @@
 package ensta;
 
 import ensta.controller.Game;
+import ensta.model.Board;
 
 public class Main {
 

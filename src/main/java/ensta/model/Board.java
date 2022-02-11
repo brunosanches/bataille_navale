@@ -7,12 +7,54 @@ public class Board implements IBoard {
 
 	private static final int DEFAULT_SIZE = 10;
 	private int size;
+	private Tile[][] grid;
+	private String name;
 
-	// TODO: Implement methods
-	public Board() {
+	public Board(String name, int size) {
+		this.name = name;
+		this.size = size;
+		this.grid = new Tile[size][size];
+
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
+				grid[i][j] = new Tile();
+	}
+
+	public Board(String name) {
+		this(name, DEFAULT_SIZE);
 	}
 
 	public void print() {
+		int numberOfSpaces = ((int) Math.ceil(Math.log10(size)) + 2) +
+							 2*size + 3 - "Navires :".length();
+		System.out.format("Navires :%" + numberOfSpaces + "sFrappes:\n", "");
+
+		numberOfSpaces = (int) Math.ceil(Math.log10(size)) + 2;
+
+		System.out.format("%" + numberOfSpaces + "s", "");
+		for (char i = 'A'; i < 'A' + size; i++) {
+			System.out.print(i + " ");
+		}
+
+		System.out.format("%" + (3 + numberOfSpaces) + "s", "");
+		for (char i = 'A'; i < 'A' + size; i++) {
+			System.out.print(i + " ");
+		}
+		System.out.print("\n");
+
+		for (int i = 0; i < this.size; i++) {
+			System.out.format("%-" + numberOfSpaces + "d", i+1);
+			for (int j = 0; j < this.size; j++) {
+				System.out.print(grid[i][j].getShip() + " ");
+			}
+
+			System.out.format("   %-" + numberOfSpaces + "d", i+1);
+			for (int j = 0; j < this.size; j++) {
+				System.out.print(grid[i][j].isHit() ? "x" : "." + " ");
+			}
+			System.out.print("\n");
+		}
+
 	}
 
 	@Override
