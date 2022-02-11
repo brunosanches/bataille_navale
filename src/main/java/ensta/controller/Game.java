@@ -1,7 +1,6 @@
 package ensta.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -45,19 +44,22 @@ public class Game {
 			Board board1 = new Board("Board1");
 			Board board2 = new Board("Board2");
 
-			// TODO init this.player1 & this.player2
 			this.player1 = new Player(board1, board2, createDefaultShips());
 			this.player2 = new Player(board2, board1, createDefaultShips());
 
-			// TODO place player ships
+			Coords c;
 			for (AbstractShip ship : player1.getShips()) {
-				ship.setOrientation(Orientation.randomOrientation());
-				while (player1.getBoard().putShip(ship, Coords.randomCoords(player1.getBoard().getSize())) == false);
+				do {
+					ship.setOrientation(Orientation.randomOrientation());
+					c = Coords.randomCoords(player1.getBoard().getSize());
+				} while(!player1.getBoard().putShip(ship, c));
 			}
 
 			for (AbstractShip ship: player2.getShips()) {
-				ship.setOrientation(Orientation.randomOrientation());
-				while (player2.getBoard().putShip(ship, Coords.randomCoords(player2.getBoard().getSize())) == false);
+				do {
+					ship.setOrientation(Orientation.randomOrientation());
+					c = Coords.randomCoords(player2.getBoard().getSize());
+				} while(!player2.getBoard().putShip(ship, c));
 			}
 		}
 		return this;
