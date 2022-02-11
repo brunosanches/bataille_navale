@@ -16,6 +16,7 @@ import ensta.model.ship.Carrier;
 import ensta.model.ship.Destroyer;
 import ensta.model.ship.Submarine;
 import ensta.util.ColorUtil;
+import ensta.util.Orientation;
 
 public class Game {
 
@@ -49,6 +50,15 @@ public class Game {
 			this.player2 = new Player(board2, board1, createDefaultShips());
 
 			// TODO place player ships
+			for (AbstractShip ship : player1.getShips()) {
+				ship.setOrientation(Orientation.randomOrientation());
+				while (player1.getBoard().putShip(ship, Coords.randomCoords(player1.getBoard().getSize())) == false);
+			}
+
+			for (AbstractShip ship: player2.getShips()) {
+				ship.setOrientation(Orientation.randomOrientation());
+				while (player2.getBoard().putShip(ship, Coords.randomCoords(player2.getBoard().getSize())) == false);
+			}
 		}
 		return this;
 	}
@@ -164,7 +174,7 @@ public class Game {
 	}
 
 	private static List<AbstractShip> createDefaultShips() {
-		return Arrays.asList(new AbstractShip[] { new Destroyer(), new Submarine(), new Submarine(), new BattleShip(),
-				new Carrier() });
+		return Arrays.asList(new AbstractShip[] { new Destroyer(), new Submarine(), new Submarine(),
+				new BattleShip(), new Carrier() });
 	}
 }

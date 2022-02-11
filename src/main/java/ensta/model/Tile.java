@@ -1,28 +1,32 @@
 package ensta.model;
 
+import ensta.model.ship.AbstractShip;
+
 public class Tile {
-    private char ship;
+    private AbstractShip ship;
     private boolean hit;
     // Sugestion: boolean isHit, AbstractShip ship, Coords coords
 
-    public Tile(char ship, boolean hit) {
+    public Tile(AbstractShip ship, boolean hit) {
         this.ship = ship;
         this.hit = hit;
     }
 
-    public Tile(char ship) {
+    public Tile(AbstractShip ship) {
         this(ship, false);
     }
 
     public Tile() {
-        this('.', false);
+        this(null, false);
     }
 
-    public char getShip() {
+    public boolean hasShip() { return ship != null; }
+
+    public AbstractShip getShip() {
         return ship;
     }
 
-    public void setShip(char ship) {
+    public void putShip(AbstractShip ship) {
         this.ship = ship;
     }
 
@@ -33,4 +37,5 @@ public class Tile {
     public void setHit(boolean hit) {
         this.hit = hit;
     }
+
 }

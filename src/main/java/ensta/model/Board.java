@@ -45,7 +45,12 @@ public class Board implements IBoard {
 		for (int i = 0; i < this.size; i++) {
 			System.out.format("%-" + numberOfSpaces + "d", i+1);
 			for (int j = 0; j < this.size; j++) {
-				System.out.print(grid[i][j].getShip() + " ");
+				if (grid[i][j].hasShip()) {
+					System.out.print(grid[i][j].getShip().getLabel() + " ");
+				}
+				else {
+					System.out.print(". ");
+				}
 			}
 
 			System.out.format("   %-" + numberOfSpaces + "d", i+1);
@@ -59,27 +64,48 @@ public class Board implements IBoard {
 
 	@Override
 	public int getSize() {
-		return 0;
+		return size;
 	}
 
 	@Override
 	public boolean putShip(AbstractShip ship, Coords coords) {
+		if (canPutShip(ship, coords)) {
+			for (int i = 0; i < ship.getLength(); i++) {
+				grid[coords.getY()][coords.getX()].putShip(ship);
+
+				switch(ship.getOrientation()) {
+					case EAST:
+						coords.setX(coords.getX() + 1);
+						break;
+					case SOUTH:
+						coords.setY(coords.getY() + 1);
+						break;
+					case WEST:
+						coords.setX(coords.getX() - 1);
+						break;
+					case NORTH:
+						coords.setY(coords.getY() - 1);
+						break;
+				}
+			}
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean hasShip(Coords coords) {
-		return false;
+		return grid[coords.getY()][coords.getX()].hasShip();
 	}
 
 	@Override
 	public void setHit(boolean hit, Coords coords) {
-
+		grid[coords.getY()][coords.getX()].setHit(hit);
 	}
 
 	@Override
 	public Boolean getHit(Coords coords) {
-		return null;
+		return grid[coords.getY()][coords.getX()].isHit();
 	}
 
 	@Override

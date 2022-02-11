@@ -1,26 +1,28 @@
 package ensta.model;
 
+import java.util.Random;
+
 public class Coords {
     private int x;
     private int y;
-
-    // TODO: Implement Coords constructors
 
     public Coords() {
         x = y = 0;
     }
 
-    public Coords(int x, int iy) {
-        new Coords();
+    public Coords(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public Coords(Coords coords) {
-
+        this.x = coords.getX();
+        this.y = coords.getY();
     }
 
-    // TODO: Implement randomCoords
     public static Coords randomCoords(int size) {
-        return new Coords();
+        Random rand = new Random();
+        return new Coords(rand.nextInt(size), rand.nextInt(size));
     }
 
     public int getX() {
@@ -42,8 +44,10 @@ public class Coords {
     }
 
     public void setX(int i) {
+        x = i;
     }
 
     public void setY(int i) {
+        y = i;
     }
 }
