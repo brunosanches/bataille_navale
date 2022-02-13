@@ -75,9 +75,9 @@ public class Game {
 		boolean done;
 		do {
 			Coords coords1 = new Coords();
-			//hit = player1.sendHit(coords1); // TODO player1 send a hit
-			hit = Hit.MISS;
+			hit = player1.sendHit(coords1);
 			boolean strike = hit != Hit.MISS; // TODO set this hit on his board (b1)
+			player1.getBoard().setHit(strike, coords1);
 
 			done = updateScore();
 			b1.print();
@@ -88,11 +88,11 @@ public class Game {
 			if (!done && !strike) {
 				do {
 					Coords coords2 = new Coords();
-					Pair<Hit, Coords> p = player2.sendHit(); // TODO player2 send a hit.
-					hit = p.getKey();
-					coords2 = p.getValue();
+					hit = player2.sendHit(coords2);
 
 					strike = hit != Hit.MISS;
+
+					player2.getBoard().setHit(strike, coords2);
 					if (strike) {
 						b1.print();
 					}
@@ -109,7 +109,7 @@ public class Game {
 
 		SAVE_FILE.delete();
 		System.out.println(String.format("joueur %d gagne", player1.isLose() ? 2 : 1));
-		sin.close();
+		//sin.close();
 	}
 
 	private void save() {

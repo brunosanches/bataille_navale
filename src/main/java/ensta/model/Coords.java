@@ -33,14 +33,13 @@ public class Coords {
         return y;
     }
 
-    // TODO: Implement setCoords receiving coords from other Coords object
     public void setCoords(Coords res) {
-
+        x = res.getX();
+        y = res.getY();
     }
 
-    // TODO: Implement isInBoard
     public boolean isInBoard(int size) {
-        return false;
+        return x >= 0 && x < size && y > 0 && y <= size;
     }
 
     public void setX(int i) {
