@@ -36,7 +36,7 @@ public class Player {
 	 * coodrinates.
 	 */
 	public void putShips() {
-		boolean done = false;
+		boolean done;
 		int i = 0;
 
 		do {
@@ -91,7 +91,7 @@ public class Player {
 				coords.setCoords(c);
 				done = true;
 			}
-			catch(Exception e) {};
+			catch(Exception ignored) {}
 		} while (!done);
 
 		return hit;
