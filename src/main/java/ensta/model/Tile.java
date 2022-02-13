@@ -1,40 +1,60 @@
 package ensta.model;
 
 import ensta.model.ship.AbstractShip;
+import ensta.model.ship.ShipState;
 
 public class Tile {
-    private AbstractShip ship;
-    private boolean hit;
+    private ShipState shipState;
+    private Boolean hit;
     // Sugestion: boolean isHit, AbstractShip ship, Coords coords
 
-    public Tile(AbstractShip ship, boolean hit) {
-        this.ship = ship;
+    public Tile(ShipState shipState, Boolean hit) {
+        this.shipState = shipState;
+        this.hit = hit;
+    }
+
+    public Tile(AbstractShip ship, Boolean hit) {
+        this.shipState = new ShipState(ship);
         this.hit = hit;
     }
 
     public Tile(AbstractShip ship) {
-        this(ship, false);
+
+        this(ship, null);
+    }
+
+    public Tile(ShipState shipState) {
+
+        this(shipState, null);
     }
 
     public Tile() {
-        this(null, false);
+
+        this((ShipState) null, null);
     }
 
-    public boolean hasShip() { return ship != null; }
+    public boolean hasShip() {
+
+        return shipState != null;
+    }
 
     public AbstractShip getShip() {
-        return ship;
+
+        return shipState.getShip();
     }
 
     public void putShip(AbstractShip ship) {
-        this.ship = ship;
+
+        this.shipState = new ShipState(ship);
     }
 
-    public boolean isHit() {
+    public Boolean isHit() {
+
         return hit;
     }
 
     public void setHit(boolean hit) {
+
         this.hit = hit;
     }
 

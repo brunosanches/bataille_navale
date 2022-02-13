@@ -1,6 +1,7 @@
 package ensta.model;
 
 import ensta.model.ship.AbstractShip;
+import ensta.util.ColorUtil;
 import ensta.util.Orientation;
 
 public class Board implements IBoard {
@@ -55,7 +56,8 @@ public class Board implements IBoard {
 
 			System.out.format("   %-" + numberOfSpaces + "d", i);
 			for (int j = 0; j < this.size; j++) {
-				System.out.print(grid[i][j].isHit() ? "x" : "." + " ");
+				System.out.print(grid[i][j].isHit() == null ? ". " :
+						grid[i][j].isHit() ? ColorUtil.colorize("X ", ColorUtil.Color.RED) : "X ");
 			}
 			System.out.print("\n");
 		}
