@@ -1,6 +1,7 @@
 package ensta.model;
 
 import ensta.model.ship.AbstractShip;
+import ensta.model.ship.ShipState;
 import ensta.util.ColorUtil;
 import ensta.util.Orientation;
 
@@ -47,7 +48,7 @@ public class Board implements IBoard {
 			System.out.format("%-" + numberOfSpaces + "d", i);
 			for (int j = 0; j < this.size; j++) {
 				if (grid[i][j].hasShip()) {
-					System.out.print(grid[i][j].getShip().getLabel() + " ");
+					System.out.print(grid[i][j].getShipState().toString() + " ");
 				}
 				else {
 					System.out.print(". ");
@@ -64,6 +65,9 @@ public class Board implements IBoard {
 
 	}
 
+	public Tile getTile(Coords coords) {
+		return grid[coords.getY()][coords.getX()];
+	}
 	@Override
 	public int getSize() {
 		return size;
@@ -73,7 +77,7 @@ public class Board implements IBoard {
 	public boolean putShip(AbstractShip ship, Coords coords) {
 		if (canPutShip(ship, coords)) {
 			for (int i = 0; i < ship.getLength(); i++) {
-				grid[coords.getY()][coords.getX()].putShip(ship);
+				getTile(coords).putShip(ship);
 
 				switch(ship.getOrientation()) {
 					case EAST:
@@ -97,22 +101,33 @@ public class Board implements IBoard {
 
 	@Override
 	public boolean hasShip(Coords coords) {
-		return grid[coords.getY()][coords.getX()].hasShip();
+		return getTile(coords).hasShip();
 	}
 
 	@Override
 	public void setHit(boolean hit, Coords coords) {
-		grid[coords.getY()][coords.getX()].setHit(hit);
+		getTile(coords).setHit(hit);
 	}
 
 	@Override
 	public Boolean getHit(Coords coords) {
-		return grid[coords.getY()][coords.getX()].isHit();
+		return getTile(coords).isHit();
 	}
 
 	@Override
-	public Hit sendHit(Coords res) {
-		return null;
+	public Hit sendHit(Coords coords) {
+		Tile t = getTile(coords);
+		if (!t.hasShip()) {
+			return Hit.MISS;
+		}
+		else {
+			ShipState s = t.getShipState();
+			s.addStrike();
+			if (s.isSunk())
+				return Hit.fromInt(s.getShip().getLength());
+			else
+				return Hit.STRIKE;
+		}
 	}
 
 	public boolean canPutShip(AbstractShip ship, Coords coords) {
@@ -121,12 +136,12 @@ public class Board implements IBoard {
 		if (coords.getY() < 1 || coords.getX() < 0)
 			return false;
 		else if (o == Orientation.EAST) {
-			if (coords.getX() + ship.getLength() >= this.size) {
+			if (coords.getX() + ship.getLength() - 1 >= this.size) {
 				return false;
 			}
 			dx = 1;
 		} else if (o == Orientation.SOUTH) {
-			if (coords.getY() + ship.getLength() >= this.size+1) {
+			if (coords.getY() + ship.getLength() - 1 >= this.size+1) {
 				return false;
 			}
 			dy = 1;

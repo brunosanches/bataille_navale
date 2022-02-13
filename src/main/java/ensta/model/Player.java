@@ -6,6 +6,7 @@ import java.util.List;
 import ensta.model.ship.AbstractShip;
 import ensta.util.Orientation;
 import ensta.view.InputHelper;
+import javafx.util.Pair;
 
 public class Player {
 	/*
@@ -45,14 +46,20 @@ public class Player {
 			InputHelper.ShipInput res = InputHelper.readShipInput();
 			// TODO set ship orientation
 			Orientation o;
-			if (res.orientation.equals("north"))
-				o = Orientation.NORTH;
-			else if (res.orientation.equals("east"))
-				o = Orientation.EAST;
-			else if (res.orientation.equals("south"))
-				o = Orientation.SOUTH;
-			else
-				o = Orientation.WEST;
+			switch (res.orientation) {
+				case "north":
+					o = Orientation.NORTH;
+					break;
+				case "east":
+					o = Orientation.EAST;
+					break;
+				case "south":
+					o = Orientation.SOUTH;
+					break;
+				default:
+					o = Orientation.WEST;
+					break;
+			}
 
 			ship.setOrientation(o);
 
@@ -70,20 +77,23 @@ public class Player {
 		} while (!done);
 	}
 
-	public Hit sendHit(Coords coords) {
+	public Pair<Hit, Coords> sendHit() {
 		boolean done = false;
 		Hit hit = null;
-
+		Pair<Hit, Coords> p;
 		do {
 			System.out.println("où frapper?");
 			InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
+			Coords coords = new Coords(hitInput.x, hitInput.y);
 			// TODO call sendHit on this.opponentBoard
-
+			hit = this.opponentBoard.sendHit(coords);
 			// TODO : Game expects sendHit to return BOTH hit result & hit coords.
 			// return hit is obvious. But how to return coords at the same time ?
+			p = new Pair<>(hit, coords);
+			done = true;
 		} while (!done);
 
-		return hit;
+		return p;
 	}
 
 	public AbstractShip[] getShips() {

@@ -16,6 +16,7 @@ import ensta.model.ship.Destroyer;
 import ensta.model.ship.Submarine;
 import ensta.util.ColorUtil;
 import ensta.util.Orientation;
+import javafx.util.Pair;
 
 public class Game {
 
@@ -73,7 +74,9 @@ public class Game {
 		b1.print();
 		boolean done;
 		do {
-			hit = Hit.MISS; // TODO player1 send a hit
+			Coords coords1 = new Coords();
+			//hit = player1.sendHit(coords1); // TODO player1 send a hit
+			hit = Hit.MISS;
 			boolean strike = hit != Hit.MISS; // TODO set this hit on his board (b1)
 
 			done = updateScore();
@@ -84,7 +87,10 @@ public class Game {
 
 			if (!done && !strike) {
 				do {
-					hit = Hit.MISS; // TODO player2 send a hit.
+					Coords coords2 = new Coords();
+					Pair<Hit, Coords> p = player2.sendHit(); // TODO player2 send a hit.
+					hit = p.getKey();
+					coords2 = p.getValue();
 
 					strike = hit != Hit.MISS;
 					if (strike) {

@@ -33,6 +33,10 @@ public class Tile {
         this((ShipState) null, null);
     }
 
+    public ShipState getShipState() {
+        return shipState;
+    }
+
     public boolean hasShip() {
 
         return shipState != null;

@@ -39,7 +39,12 @@ public interface IBoard {
      */
     public Boolean getHit(Coords coords);
 
-	public Hit sendHit(Coords res);
+    /**
+     * Sends a hit at the given position
+     * @param coords
+     * @return status for the hit (eg : strike or miss)
+     */
+    Hit sendHit(Coords coords);
 
-	public boolean canPutShip(AbstractShip ship, Coords coords);
+    public boolean canPutShip(AbstractShip ship, Coords coords);
 }
