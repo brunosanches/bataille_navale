@@ -47,13 +47,9 @@ public class Game {
 			this.player1 = new Player(board1, board2, createDefaultShips());
 			this.player2 = new Player(board2, board1, createDefaultShips());
 
+			this.player1.putShips();
+
 			Coords c;
-			for (AbstractShip ship : player1.getShips()) {
-				do {
-					ship.setOrientation(Orientation.randomOrientation());
-					c = Coords.randomCoords(player1.getBoard().getSize());
-				} while(!player1.getBoard().putShip(ship, c));
-			}
 
 			for (AbstractShip ship: player2.getShips()) {
 				do {

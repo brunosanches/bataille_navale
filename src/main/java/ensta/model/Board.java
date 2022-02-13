@@ -13,9 +13,9 @@ public class Board implements IBoard {
 	public Board(String name, int size) {
 		this.name = name;
 		this.size = size;
-		this.grid = new Tile[size][size];
+		this.grid = new Tile[size+1][size];
 
-		for (int i = 0; i < size; i++)
+		for (int i = 1; i < size+1; i++)
 			for (int j = 0; j < size; j++)
 				grid[i][j] = new Tile();
 	}
@@ -42,8 +42,8 @@ public class Board implements IBoard {
 		}
 		System.out.print("\n");
 
-		for (int i = 0; i < this.size; i++) {
-			System.out.format("%-" + numberOfSpaces + "d", i+1);
+		for (int i = 1; i < this.size+1; i++) {
+			System.out.format("%-" + numberOfSpaces + "d", i);
 			for (int j = 0; j < this.size; j++) {
 				if (grid[i][j].hasShip()) {
 					System.out.print(grid[i][j].getShip().getLabel() + " ");
@@ -53,7 +53,7 @@ public class Board implements IBoard {
 				}
 			}
 
-			System.out.format("   %-" + numberOfSpaces + "d", i+1);
+			System.out.format("   %-" + numberOfSpaces + "d", i);
 			for (int j = 0; j < this.size; j++) {
 				System.out.print(grid[i][j].isHit() ? "x" : "." + " ");
 			}
@@ -116,18 +116,20 @@ public class Board implements IBoard {
 	public boolean canPutShip(AbstractShip ship, Coords coords) {
 		Orientation o = ship.getOrientation();
 		int dx = 0, dy = 0;
-		if (o == Orientation.EAST) {
+		if (coords.getY() < 1 || coords.getX() < 0)
+			return false;
+		else if (o == Orientation.EAST) {
 			if (coords.getX() + ship.getLength() >= this.size) {
 				return false;
 			}
 			dx = 1;
 		} else if (o == Orientation.SOUTH) {
-			if (coords.getY() + ship.getLength() >= this.size) {
+			if (coords.getY() + ship.getLength() >= this.size+1) {
 				return false;
 			}
 			dy = 1;
 		} else if (o == Orientation.NORTH) {
-			if (coords.getY() + 1 - ship.getLength() < 0) {
+			if (coords.getY() + 1 - ship.getLength() < 1) {
 				return false;
 			}
 			dy = -1;

@@ -44,9 +44,26 @@ public class Player {
 			System.out.println(msg);
 			InputHelper.ShipInput res = InputHelper.readShipInput();
 			// TODO set ship orientation
+			Orientation o;
+			if (res.orientation.equals("north"))
+				o = Orientation.NORTH;
+			else if (res.orientation.equals("east"))
+				o = Orientation.EAST;
+			else if (res.orientation.equals("south"))
+				o = Orientation.SOUTH;
+			else
+				o = Orientation.WEST;
+
+			ship.setOrientation(o);
+
 			// TODO put ship at given position
+			boolean success = this.getBoard().putShip(ship, new Coords(res.x, res.y));
 			// TODO when ship placement successful
-			++i;
+			if (success)
+				++i;
+			else
+				System.out.println("Position non valide");
+
 			done = i == 5;
 
 			board.print();
