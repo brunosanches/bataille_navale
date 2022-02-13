@@ -7,9 +7,9 @@ import ensta.util.Orientation;
 public class Board implements IBoard {
 
 	private static final int DEFAULT_SIZE = 10;
-	private int size;
+	private final int size;
 	private Tile[][] grid;
-	private String name;
+	private final String name;
 
 	public Board(String name, int size) {
 		this.name = name;
