@@ -1,5 +1,7 @@
 package ensta.view;
 
+import ensta.model.Coords;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -66,6 +68,7 @@ public final class InputHelper {
 				String coord = scanner.nextLine().toLowerCase();
 				res.x = coord.charAt(0) - 'a';
 				res.y = Integer.parseInt(coord.substring(1, coord.length()));
+
 				done = true;
 			} catch (Exception e) {
 				System.err.println("Format incorrect! Entrez la position sous forme 'A1'");

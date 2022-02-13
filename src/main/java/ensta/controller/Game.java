@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import ensta.ai.PlayerAI;
 import ensta.model.Board;
 import ensta.model.Coords;
 import ensta.model.Hit;
@@ -41,23 +42,14 @@ public class Game {
 	public Game init() {
 		if (!loadSave()) {
 
-			// TODO init boards
 			Board board1 = new Board("Board1");
 			Board board2 = new Board("Board2");
 
 			this.player1 = new Player(board1, board2, createDefaultShips());
-			this.player2 = new Player(board2, board1, createDefaultShips());
+			this.player2 = new PlayerAI(board2, board1, createDefaultShips());
 
 			this.player1.putShips();
-
-			Coords c;
-
-			for (AbstractShip ship: player2.getShips()) {
-				do {
-					ship.setOrientation(Orientation.randomOrientation());
-					c = Coords.randomCoords(player2.getBoard().getSize());
-				} while(!player2.getBoard().putShip(ship, c));
-			}
+			this.player2.putShips();
 		}
 		return this;
 	}

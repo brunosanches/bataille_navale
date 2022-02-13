@@ -81,14 +81,17 @@ public class Player {
 		boolean done = false;
 		Hit hit = null;
 		do {
-			System.out.println("où frapper?");
-			InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
-			Coords c = new Coords(hitInput.x, hitInput.y);
-			// TODO call sendHit on this.opponentBoard
-			hit = this.opponentBoard.sendHit(c);
-			// TODO : Game expects sendHit to return BOTH hit result & hit coords.
-			coords.setCoords(c);
-			done = true;
+			try {
+				System.out.println("où frapper?");
+				InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
+				Coords c = new Coords(hitInput.x, hitInput.y);
+				// TODO call sendHit on this.opponentBoard
+				hit = this.opponentBoard.sendHit(c);
+				// TODO : Game expects sendHit to return BOTH hit result & hit coords.
+				coords.setCoords(c);
+				done = true;
+			}
+			catch(Exception e) {};
 		} while (!done);
 
 		return hit;
