@@ -118,8 +118,7 @@ public class Game {
 			player1.printBoard();
 			System.out.println(makeHitMessage(false /* outgoing hit */, coords1, hit));
 
-			if (!isMultiplayerOnline || (isMultiplayerOnline && ((PlayerOnline) player1).isLocal()))
-				save();
+			save();
 
 			if (!done && !strike) {
 				player2.printBoard();
@@ -139,15 +138,15 @@ public class Game {
 					System.out.println(makeHitMessage(true /* incoming hit */, coords2, hit));
 					done = updateScore();
 
-					if (!done && (!isMultiplayerOnline || (isMultiplayerOnline && ((PlayerOnline) player1).isLocal()))) {
+					if (!done) {
 						save();
 					}
 				} while (strike && !done);
 			}
 
 		} while (!done);
-		if (!isMultiplayerOnline || (isMultiplayerOnline && ((PlayerOnline) player1).isLocal()))
-			SAVE_FILE.delete();
+
+		SAVE_FILE.delete();
 
 		System.out.println(String.format("joueur %d gagne", player1.isLose() ? 2 : 1));
 		sin.close();
