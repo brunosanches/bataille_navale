@@ -10,9 +10,9 @@ import java.io.Serializable;
 public class Board implements IBoard, Serializable {
 
 	private static final int DEFAULT_SIZE = 10;
-	private final int size;
+	private int size;
 	private Tile[][] grid;
-	private final String name;
+	private String name;
 
 	public Board(String name, int size) {
 		this.name = name;
@@ -171,4 +171,19 @@ public class Board implements IBoard, Serializable {
 
 		return true;
 	}
+
+	public Tile[][] getGrid() {
+		return grid;
+	}
+
+	public void setGrid(Tile[][] grid) {
+		this.grid = grid;
+	}
+
+	public void copy(Board board) {
+		this.grid = board.grid;
+		this.name = board.name;
+		this.size = board.size;
+	}
+
 }

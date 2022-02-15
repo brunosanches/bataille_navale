@@ -1,6 +1,6 @@
 package ensta.model;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.List;
 
 import ensta.model.ship.AbstractShip;
@@ -11,12 +11,13 @@ public class Player implements Serializable {
 	/*
 	 * ** Attributs
 	 */
-	private Board board;
+	protected Board board;
 	protected Board opponentBoard;
 	private int destroyedCount;
 	protected AbstractShip[] ships;
 	private boolean lose;
 	private String name;
+	private static final long serialVersionUID = 233128818881815240L;
 
 	/*
 	 * ** Constructeur
@@ -27,6 +28,8 @@ public class Player implements Serializable {
 		this.ships = ships.toArray(new AbstractShip[0]);
 		this.opponentBoard = opponentBoard;
 	}
+
+	public Player() {}
 
 	/*
 	 * ** Méthodes
@@ -110,6 +113,10 @@ public class Player implements Serializable {
 		this.board = board;
 	}
 
+	public void copyBoard(Board board) {
+		this.board.copy(board);
+	}
+
 	public int getDestroyedCount() {
 		return destroyedCount;
 	}
@@ -125,4 +132,30 @@ public class Player implements Serializable {
 	public void setLose(boolean lose) {
 		this.lose = lose;
 	}
+
+	public void printBoard() {
+		board.print();
+	}
+
+	/**
+	 * Externalizable methods implementation, this interface works with serializable exposing serializable methods
+	 */
+
+//	@Override
+//	public void writeExternal(ObjectOutput out) throws IOException {
+//		out.writeObject(board);
+//		out.writeObject(opponentBoard);
+//		out.writeUTF(name);
+//		out.writeBoolean(lose);
+//		out.writeInt(destroyedCount);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+//		board = (Board) in.readObject();
+//		opponentBoard = (Board) in.readObject();
+//		name = in.readUTF();
+//		lose = in.readBoolean();
+//		destroyedCount = in.readInt();
+//	}
 }

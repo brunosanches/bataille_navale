@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import ensta.ai.PlayerAI;
-import ensta.model.Board;
-import ensta.model.Coords;
-import ensta.model.Hit;
-import ensta.model.Player;
+import ensta.model.*;
 import ensta.model.ship.AbstractShip;
 import ensta.model.ship.BattleShip;
 import ensta.model.ship.Carrier;
@@ -30,6 +27,7 @@ public class Game {
 	private Player player1;
 	private Player player2;
 	private Scanner sin;
+	private boolean isMultiplayerOnline = false;
 
 	/*
 	 * *** Constructeurs
@@ -44,8 +42,6 @@ public class Game {
 			Board board1 = new Board("Board1");
 			Board board2 = new Board("Board2");
 
-			this.player1 = new Player("Player 1", board1, board2, createDefaultShips());
-
 			char r;
 			do{
 				System.out.println("2 players mode ? y/[n]");
@@ -53,9 +49,44 @@ public class Game {
 			} while(r != 'y' && r != 'n' && r != '\n');
 
 			if (r == 'y') {
-				this.player2 = new Player("Player2", board2, board1, createDefaultShips());
+				char p;
+				do{
+					System.out.println("Is online ? y/[n]");
+					p = sin.next().charAt(0);
+				} while(p != 'y' && p != 'n' && p != '\n');
+
+				if (p == 'y') {
+					isMultiplayerOnline = true;
+
+					char c;
+					do {
+						System.out.println("Are you the server ? y/[n]");
+						c = sin.next().charAt(0);
+					} while (c != 'y' && c != 'n' && c != '\n');
+
+					if (c == 'y') {
+						this.player1 = new PlayerOnline("Player1", board1, board2, createDefaultShips(),
+								true, true);
+						this.player2 = new PlayerOnline("Player2", board2, board1, createDefaultShips(),
+								false, false);
+
+
+					} else {
+						this.player1 = new PlayerOnline("Player1", board1, board2, createDefaultShips(),
+								false, true);
+						this.player2 = new PlayerOnline("Player2", board2, board1, createDefaultShips(),
+								true, false);
+
+					}
+				}
+				else {
+					this.player1 = new Player("Player 1", board1, board2, createDefaultShips());
+					this.player2 = new Player("Player 2", board2, board1, createDefaultShips());
+				}
+
 			}
 			else {
+				this.player1 = new Player("Player 1", board1, board2, createDefaultShips());
 				this.player2 = new PlayerAI(board2, board1, createDefaultShips());
 			}
 
@@ -69,12 +100,10 @@ public class Game {
 	 * *** Méthodes
 	 */
 	public void run() {
-		Board b1 = player1.getBoard();
-		Board b2 = player2.getBoard();
 		Hit hit;
 
 		// main loop
-		b1.print();
+		player1.printBoard();
 		boolean done;
 		do {
 			Coords coords1 = new Coords();
@@ -82,14 +111,18 @@ public class Game {
 			boolean strike = hit != Hit.MISS;
 			player1.getBoard().setHit(strike, coords1);
 
+			if (strike)
+				player2.printBoard();
+
 			done = updateScore();
-			b1.print();
+			player1.printBoard();
 			System.out.println(makeHitMessage(false /* outgoing hit */, coords1, hit));
 
-			save();
+			if (!isMultiplayerOnline || (isMultiplayerOnline && ((PlayerOnline) player1).isLocal()))
+				save();
 
 			if (!done && !strike) {
-				b2.print();
+				player2.printBoard();
 				do {
 					Coords coords2 = new Coords();
 					hit = player2.sendHit(coords2);
@@ -98,20 +131,24 @@ public class Game {
 
 					player2.getBoard().setHit(strike, coords2);
 
-					b2.print();
+					if (strike) {
+						player1.printBoard();
+					}
+					player2.printBoard();
 
 					System.out.println(makeHitMessage(true /* incoming hit */, coords2, hit));
 					done = updateScore();
 
-					if (!done) {
+					if (!done && (!isMultiplayerOnline || (isMultiplayerOnline && ((PlayerOnline) player1).isLocal()))) {
 						save();
 					}
 				} while (strike && !done);
 			}
 
 		} while (!done);
+		if (!isMultiplayerOnline || (isMultiplayerOnline && ((PlayerOnline) player1).isLocal()))
+			SAVE_FILE.delete();
 
-		SAVE_FILE.delete();
 		System.out.println(String.format("joueur %d gagne", player1.isLose() ? 2 : 1));
 		sin.close();
 	}
@@ -124,7 +161,7 @@ public class Game {
 
 			FileOutputStream fos = new FileOutputStream(SAVE_FILE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-
+			oos.writeBoolean(isMultiplayerOnline);
 			oos.writeObject(player1);
 			oos.writeObject(player2);
 
@@ -142,8 +179,28 @@ public class Game {
 				FileInputStream fis = new FileInputStream(SAVE_FILE);
 				ObjectInputStream ois = new ObjectInputStream(fis);
 
+				isMultiplayerOnline = ois.readBoolean();
 				player1 = (Player) ois.readObject();
 				player2 = (Player) ois.readObject();
+
+				if (isMultiplayerOnline) {
+					char c;
+					do{
+						System.out.println("Are you the server ? y/[n]");
+						c = sin.next().charAt(0);
+					} while(c != 'y' && c != 'n' && c != '\n');
+
+					if (c == 'y') {
+						((PlayerOnline) player1).setLocal(true);
+						((PlayerOnline) player1).setConnection(true);
+						((PlayerOnline) player2).setLocal(false);
+					}
+					else {
+						((PlayerOnline) player1).setLocal(false);
+						((PlayerOnline) player2).setLocal(true);
+						((PlayerOnline) player2).setConnection(false);
+					}
+				}
 
 				ois.close();
 				fis.close();

@@ -30,4 +30,7 @@ public class PlayerAI extends Player {
     public void putShips() {
         ai.putShips(this.ships);
     }
+
+    @Override
+    public void printBoard() {}
 }
