@@ -1,5 +1,10 @@
 # Projet Bataille Navale
 
+## exécution du projet
+C'est possible de compiler et exécuter le projet en utilisant maven, cependant si vous avez seule le .jar, l'exécution peut-être fait comme
+
+`java -cp bataille_navale-1.0-SNAPSHOT.jar ensta.Main`
+
 ## Jeu multijoeur en ligne
 Pour jouer en ligne, il faut avoir un joeur server et un client, le joeur server
 doit mettre 'y' dans la option présenté et l'autre 'n'. 
