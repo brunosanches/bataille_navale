@@ -3,7 +3,9 @@ package ensta.model;
 import ensta.model.ship.AbstractShip;
 import ensta.model.ship.ShipState;
 
-public class Tile {
+import java.io.Serializable;
+
+public class Tile implements Serializable {
     private ShipState shipState;
     private Boolean hit;
     // Sugestion: boolean isHit, AbstractShip ship, Coords coords

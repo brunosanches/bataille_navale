@@ -1,8 +1,9 @@
 package ensta.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Coords {
+public class Coords implements Serializable {
     private int x;
     private int y;
 

@@ -1,6 +1,6 @@
 package ensta.controller;
 
-import java.io.File;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -16,8 +16,6 @@ import ensta.model.ship.Carrier;
 import ensta.model.ship.Destroyer;
 import ensta.model.ship.Submarine;
 import ensta.util.ColorUtil;
-import ensta.util.Orientation;
-import javafx.util.Pair;
 
 public class Game {
 
@@ -68,14 +66,14 @@ public class Game {
 		do {
 			Coords coords1 = new Coords();
 			hit = player1.sendHit(coords1);
-			boolean strike = hit != Hit.MISS; // TODO set this hit on his board (b1)
+			boolean strike = hit != Hit.MISS;
 			player1.getBoard().setHit(strike, coords1);
 
 			done = updateScore();
 			b1.print();
-			System.out.println(makeHitMessage(false /* outgoing hit */, coords, hit));
+			System.out.println(makeHitMessage(false /* outgoing hit */, coords1, hit));
 
-			// save();
+			save();
 
 			if (!done && !strike) {
 				do {
@@ -88,11 +86,11 @@ public class Game {
 					if (strike) {
 						b1.print();
 					}
-					System.out.println(makeHitMessage(true /* incoming hit */, coords, hit));
+					System.out.println(makeHitMessage(true /* incoming hit */, coords2, hit));
 					done = updateScore();
 
 					if (!done) {
-//						save();
+						save();
 					}
 				} while (strike && !done);
 			}
@@ -105,29 +103,41 @@ public class Game {
 	}
 
 	private void save() {
-//		try {
-//			// TODO bonus 2 : uncomment
-//			// if (!SAVE_FILE.exists()) {
-//			// SAVE_FILE.getAbsoluteFile().getParentFile().mkdirs();
-//			// }
-//
-//			// TODO bonus 2 : serialize players
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			if (!SAVE_FILE.exists()) {
+				SAVE_FILE.getAbsoluteFile().getParentFile().mkdirs();
+			}
+
+			FileOutputStream fos = new FileOutputStream(SAVE_FILE);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+			oos.writeObject(player1);
+			oos.writeObject(player2);
+
+			oos.close();
+			fos.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private boolean loadSave() {
-//		if (SAVE_FILE.exists()) {
-//			try {
-//				// TODO bonus 2 : deserialize players
-//
-//				return true;
-//			} catch (IOException | ClassNotFoundException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		if (SAVE_FILE.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(SAVE_FILE);
+				ObjectInputStream ois = new ObjectInputStream(fis);
+
+				player1 = (Player) ois.readObject();
+				player2 = (Player) ois.readObject();
+
+				ois.close();
+				fis.close();
+				return true;
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 		return false;
 	}
 
@@ -165,7 +175,7 @@ public class Game {
 			color = ColorUtil.Color.RED;
 		}
 		msg = String.format("%s Frappe en %c%d : %s", incoming ? "<=" : "=>", ((char) ('A' + coords.getX())),
-				(coords.getY() + 1), msg);
+				(coords.getY()), msg);
 		return ColorUtil.colorize(msg, color);
 	}
 
