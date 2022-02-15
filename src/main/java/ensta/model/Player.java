@@ -16,11 +16,13 @@ public class Player implements Serializable {
 	private int destroyedCount;
 	protected AbstractShip[] ships;
 	private boolean lose;
+	private String name;
 
 	/*
 	 * ** Constructeur
 	 */
-	public Player(Board board, Board opponentBoard, List<AbstractShip> ships) {
+	public Player(String name, Board board, Board opponentBoard, List<AbstractShip> ships) {
+		this.name = name;
 		this.setBoard(board);
 		this.ships = ships.toArray(new AbstractShip[0]);
 		this.opponentBoard = opponentBoard;
@@ -37,10 +39,10 @@ public class Player implements Serializable {
 	public void putShips() {
 		boolean done;
 		int i = 0;
-
+		board.print();
 		do {
 			AbstractShip ship = ships[i];
-			String msg = String.format("placer %d : %s(%d)", i + 1, ship.getName(), ship.getLength());
+			String msg = String.format("%s placer %d : %s(%d)", name, i + 1, ship.getName(), ship.getLength());
 			System.out.println(msg);
 			InputHelper.ShipInput res = InputHelper.readShipInput();
 
@@ -79,7 +81,7 @@ public class Player implements Serializable {
 		Hit hit = null;
 		do {
 			try {
-				System.out.println("où frapper?");
+				System.out.println(name + " où frapper?");
 				InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
 				Coords c = new Coords(hitInput.x, hitInput.y);
 				hit = this.opponentBoard.sendHit(c);

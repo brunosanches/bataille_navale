@@ -35,6 +35,7 @@ public class Game {
 	 * *** Constructeurs
 	 */
 	public Game() {
+		sin = new Scanner(System.in);
 	}
 
 	public Game init() {
@@ -43,8 +44,20 @@ public class Game {
 			Board board1 = new Board("Board1");
 			Board board2 = new Board("Board2");
 
-			this.player1 = new Player(board1, board2, createDefaultShips());
-			this.player2 = new PlayerAI(board2, board1, createDefaultShips());
+			this.player1 = new Player("Player 1", board1, board2, createDefaultShips());
+
+			char r;
+			do{
+				System.out.println("2 players mode ? y/[n]");
+				r = sin.next().charAt(0);
+			} while(r != 'y' && r != 'n' && r != '\n');
+
+			if (r == 'y') {
+				this.player2 = new Player("Player2", board2, board1, createDefaultShips());
+			}
+			else {
+				this.player2 = new PlayerAI(board2, board1, createDefaultShips());
+			}
 
 			this.player1.putShips();
 			this.player2.putShips();
@@ -56,8 +69,8 @@ public class Game {
 	 * *** Méthodes
 	 */
 	public void run() {
-		Coords coords = new Coords();
 		Board b1 = player1.getBoard();
+		Board b2 = player2.getBoard();
 		Hit hit;
 
 		// main loop
@@ -76,6 +89,7 @@ public class Game {
 			save();
 
 			if (!done && !strike) {
+				b2.print();
 				do {
 					Coords coords2 = new Coords();
 					hit = player2.sendHit(coords2);
@@ -83,9 +97,9 @@ public class Game {
 					strike = hit != Hit.MISS;
 
 					player2.getBoard().setHit(strike, coords2);
-					if (strike) {
-						b1.print();
-					}
+
+					b2.print();
+
 					System.out.println(makeHitMessage(true /* incoming hit */, coords2, hit));
 					done = updateScore();
 
@@ -99,7 +113,7 @@ public class Game {
 
 		SAVE_FILE.delete();
 		System.out.println(String.format("joueur %d gagne", player1.isLose() ? 2 : 1));
-		//sin.close();
+		sin.close();
 	}
 
 	private void save() {

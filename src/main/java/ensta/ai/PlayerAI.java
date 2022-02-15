@@ -17,7 +17,7 @@ public class PlayerAI extends Player {
      * Constructeur
      */
     public PlayerAI(Board ownBoard, Board opponentBoard, List<AbstractShip> ships) {
-        super(ownBoard, opponentBoard, ships);
+        super("PlayerAI", ownBoard, opponentBoard, ships);
         ai = new BattleShipsAI(ownBoard, opponentBoard);
     }
 
