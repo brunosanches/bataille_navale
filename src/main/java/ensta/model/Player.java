@@ -6,9 +6,8 @@ import java.util.List;
 import ensta.model.ship.AbstractShip;
 import ensta.util.Orientation;
 import ensta.view.InputHelper;
-import javafx.util.Pair;
 
-public class Player {
+public class Player implements Serializable {
 	/*
 	 * ** Attributs
 	 */
@@ -44,7 +43,7 @@ public class Player {
 			String msg = String.format("placer %d : %s(%d)", i + 1, ship.getName(), ship.getLength());
 			System.out.println(msg);
 			InputHelper.ShipInput res = InputHelper.readShipInput();
-			// TODO set ship orientation
+
 			Orientation o;
 			switch (res.orientation) {
 				case "north":
@@ -62,10 +61,8 @@ public class Player {
 			}
 
 			ship.setOrientation(o);
-
-			// TODO put ship at given position
 			boolean success = this.getBoard().putShip(ship, new Coords(res.x, res.y));
-			// TODO when ship placement successful
+
 			if (success)
 				++i;
 			else
@@ -85,9 +82,7 @@ public class Player {
 				System.out.println("où frapper?");
 				InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
 				Coords c = new Coords(hitInput.x, hitInput.y);
-				// TODO call sendHit on this.opponentBoard
 				hit = this.opponentBoard.sendHit(c);
-				// TODO : Game expects sendHit to return BOTH hit result & hit coords.
 				coords.setCoords(c);
 				done = true;
 			}

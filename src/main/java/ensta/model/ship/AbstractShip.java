@@ -2,7 +2,9 @@ package ensta.model.ship;
 
 import ensta.util.Orientation;
 
-public abstract class AbstractShip {
+import java.io.Serializable;
+
+public abstract class AbstractShip implements Serializable {
     private char label;
     private String name;
     private int length;

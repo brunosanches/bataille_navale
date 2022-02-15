@@ -5,7 +5,9 @@ import ensta.model.ship.ShipState;
 import ensta.util.ColorUtil;
 import ensta.util.Orientation;
 
-public class Board implements IBoard {
+import java.io.Serializable;
+
+public class Board implements IBoard, Serializable {
 
 	private static final int DEFAULT_SIZE = 10;
 	private final int size;
